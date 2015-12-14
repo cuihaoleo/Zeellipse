@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Zeellipse</string>
+    <string name="textview_info_output">Center: (%1$.1f, %2$.1f)\na = %3$.1f, b = %4$.1f</string>
+    <string name="process_image_task__loading">Loading&#8230;</string>
+    <string name="process_image_task__preprocess">Preprocessing&#8230;</string>
+    <string name="process_image_task__sobel">Generating sobel image&#8230;</string>
+    <string name="process_image_task__erode_dilate">Surrounding erode/dilate&#8230;</string>
+    <string name="process_image_task__find_ellipse">Fitting ellipses&#8230;</string>
+    <string name="process_image_task__integrate">Integrating value&#8230;</string>
+    <string name="process_image_task__done">Done!</string>
+    <string name="process_image_task__failed">Failed!</string>
+</resources>

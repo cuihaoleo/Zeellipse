@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.cuihao.zeellipse.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="No image"
+        android:id="@+id/textViewMessage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/buttonLoad"
+        android:gravity="center_vertical"
+        android:layout_toLeftOf="@+id/buttonLoad"
+        android:layout_toStartOf="@+id/buttonLoad" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toggleButtonMode"
+        android:checked="false"
+        android:textOff="Auto"
+        android:textOn="Custom"
+        android:singleLine="true"
+        android:layout_above="@+id/buttonReset"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/buttonReset"
+        android:layout_alignEnd="@+id/buttonReset" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Image"
+        android:id="@+id/buttonLoad"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:id="@+id/buttonReset"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":3"
+        android:id="@+id/textViewInfo"
+        android:padding="10dp"
+        android:layout_alignBottom="@+id/buttonReset"
+        android:layout_toRightOf="@+id/buttonReset"
+        android:layout_alignRight="@+id/imageViewDisplay"
+        android:layout_alignEnd="@+id/imageViewDisplay"
+        android:layout_below="@+id/imageViewDisplay" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewDisplay"
+        android:layout_below="@+id/textViewMessage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/toggleButtonMode"
+        android:layout_alignRight="@+id/buttonLoad"
+        android:layout_alignEnd="@+id/buttonLoad"
+        android:background="#000000"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
+</RelativeLayout>
