@@ -89,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(imColor.cols(), imColor.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(imColor, bitmap);
         imageViewDisplay.setImageBitmap(bitmap);
+
+        float scale1 = 1.0F * imageViewDisplay.getWidth() / imColor.cols(),
+              scale2 = 1.0F * imageViewDisplay.getHeight() / imColor.rows();
+        float scale = scale1 > scale2 ? scale2 : scale1;
+        mAttacher.setScale(scale > mAttacher.getMinimumScale() ? scale : mAttacher.getMinimumScale());
     }
 
     private double[] secondDerivative(double[] seq) {
@@ -194,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 Utils.matToBitmap(imColor, bitmap);
                 imageViewDisplay.setImageBitmap(bitmap);
                 textViewMessage.setText(R.string.process_image_task__done);
+                resetImage();
             } else
                 textViewMessage.setText(R.string.process_image_task__failed);
         }
