@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     static final double touchReactDiffPixel = 50.0;
     static final int gapWidthThreshold = 10;
-    static final double derivative2Threshold = 0.18;
+    static final double derivative2Threshold = 1;
 
     Mat imColor, imGray;
     RotatedRect avgEllipse;
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
             double sum = 0.0;
             for (double i : seq) sum += i;
-            double val_threshold = sum / seq.length * 0.75;
+            double val_threshold = sum / seq.length;
 
             dResults.clear();
             for (int i=0, j=0; j<de2.length; i=j) {
@@ -230,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
         final PhotoViewAttacher.OnPhotoTapListener autoModeTapListener = new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View arg0, float arg1, float arg2) {
-                Log.i("Matrix", mAttacher.getDisplayMatrix().toString());
-                Log.i("Matrix2", mAttacher.getDrawMatrix().toString());
                 double x = arg1 * imGray.cols(), y = arg2 * imGray.rows();
                 double d = findNearestEllipse(x, y);
 

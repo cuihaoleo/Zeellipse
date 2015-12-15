@@ -69,7 +69,7 @@ void filter_hue_val(const Mat &hsv, Mat &dst, int min_val=20) {
     split(hsv, hsvChannels);
 
     Mat mask1;
-    inRange(hsvChannels[2], min_val, 255, mask1);
+    threshold(hsvChannels[2], mask1, 0, 255, CV_THRESH_OTSU);
 
     MatND hist;
     int histSize[] = {180};
@@ -369,9 +369,9 @@ void preprocess(Mat &bgr, Mat &gray) {
     cvtColor(bgr, hsv, CV_BGR2HSV);
     filter_hue_val(hsv, gray);
     Mat *gray_bgr[] = { &gray, &bgr, NULL };
+    equalizeHist(gray, gray);
     auto_crop(gray_bgr);
     auto_resize(gray_bgr);
- 
 }
 
 RotatedRect get_rbox(Mat &im) {
