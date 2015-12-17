@@ -162,13 +162,13 @@ public class MainActivity extends AppCompatActivity {
 
             double sum = 0.0;
             for (double i : seq) sum += i;
-            double val_threshold = sum / seq.length;
+            double val_threshold = 0.8 * sum / seq.length;
 
             dResults.clear();
             for (int i=0, j=0; j<de2.length; i=j) {
-                //Log.i("Hello", i + " " + de2[i]);
-                while (j<de2.length && de2[j]<-derivative2Threshold && seq[j] > val_threshold) j++;
-                if (j > i) {
+                while (j<de2.length && de2[j]<-derivative2Threshold) j++;
+
+                if (j > i && (seq[i] > val_threshold || seq[j] > val_threshold)) {
                     int d = i + j;
                     if (!dResults.isEmpty()) {
                         int last_d = dResults.get(dResults.size() - 1);
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                         dResults.add(d);
                 }
 
-                while (j<de2.length && !(de2[j]<-derivative2Threshold && seq[j] > val_threshold)) j++;
+                while (j<de2.length && de2[j]>=-derivative2Threshold) j++;
             }
 
             return true;
