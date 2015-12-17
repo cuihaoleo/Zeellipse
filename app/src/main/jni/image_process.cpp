@@ -143,7 +143,7 @@ void detect_ellipses(const Mat &bin,
                      ellipse_list &ellipses,
                      int min_pts = 500, int merge_overlap=8,
                      double overlap_detect_dt=M_PI/100.0,
-                     double max_ecc=0.4) {
+                     double max_ecc=0.32) {
     Mat labels, stats, centroids;
     int nLabels = connectedComponentsWithStats(bin, labels, stats, centroids);
     vector<Point> *all_points = new vector<Point>[nLabels];
@@ -158,11 +158,11 @@ void detect_ellipses(const Mat &bin,
 
     for (int flag=1; flag<nLabels; flag++) {
         int area = stats.at<int32_t>(flag, CC_STAT_AREA);
-        if (area < min_pts)
+        if (area <= min_pts)
             continue;
 
         vector<Point> points = all_points[flag];
-        cv::RotatedRect el = cv::fitEllipse(points);
+        RotatedRect el = fitEllipse(points);
 
         set<int> merged_flags;
         merged_flags.insert(0);
@@ -353,17 +353,6 @@ void elliptical_integrate(const Mat &gray, RotatedRect &el, vector<double> &avg)
         avg.push_back((double)a[1]/a[0]);
 }
 
-void second_order_diff(vector<double> &seq, vector<double> &diff) {
-    diff.clear();
-    diff.resize(seq.size());
-    for (size_t i=1; i<seq.size()-1; i++)
-        diff[i] = seq[i+1] - 2*seq[i] + seq[i-1];
-    if (diff.size() >= 2) {
-        diff[0] = diff[1];
-        diff[diff.size()-1] = diff[diff.size()-2];
-    }
-}
-
 void preprocess(Mat &bgr, Mat &gray) {
     Mat hsv;
     cvtColor(bgr, hsv, CV_BGR2HSV);
@@ -374,6 +363,7 @@ void preprocess(Mat &bgr, Mat &gray) {
     auto_resize(gray_bgr);
 }
 
+#include <cstdlib>
 RotatedRect get_rbox(Mat &im) {
     ellipse_list ellipses;
     detect_ellipses(im, ellipses);
