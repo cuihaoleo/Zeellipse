@@ -17,10 +17,6 @@ using namespace std;
 
 typedef vector< pair<int, RotatedRect> > ellipse_list;
 
-inline double square(double n) {
-    return n*n;
-}
-
 inline double radians(double deg) {
     return deg / 180.0 * M_PI;
 }
@@ -363,43 +359,8 @@ void preprocess(Mat &bgr, Mat &gray) {
     auto_resize(gray_bgr);
 }
 
-#include <cstdlib>
 RotatedRect get_rbox(Mat &im) {
     ellipse_list ellipses;
     detect_ellipses(im, ellipses);
     return average_allipse(ellipses);
 }
-
-/*
-int main(int argc, char** argv)
-{
-    Mat bgr;
-    if (argc != 2 or !(bgr = imread(argv[1])).data) {
-        cerr << "Please specify a valid image path." << endl;
-        return -1;
-    }
-
-    Mat gray, blur, sobel;
-    Point guess_center;
-    RotatedRect box;
-
-    preprocess(bgr, gray);
-    GaussianBlur(gray, blur, Size(7, 7), 3);
-    guess_center = quick_find_center(blur);
-    get_sobel(blur, sobel);
-    dynamic_erode(sobel, guess_center);
-    dynamic_dilate(sobel, guess_center);
-    box = get_rbox(sobel);
-
-    vector<double> seq;
-    elliptical_integrate(gray, box, seq);
-    for (double i: seq)
-        cout << i << ' ';
-    cout << endl;
-
-    //cout << "Center: " << box.center << ", ";
-    //cout << "Size: " << box.size << ", ";
-    //cout << "Angle: " << box.angle << endl;
-
-    return 0;
-}*/

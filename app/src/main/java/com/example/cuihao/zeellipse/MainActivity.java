@@ -329,21 +329,17 @@ public class MainActivity extends AppCompatActivity {
 
     // from: http://stackoverflow.com/questions/29232220/android-read-image-using-opencv
     private static Mat readInputStreamIntoMat(InputStream inputStream) throws IOException {
-        // Read into byte-array
         byte[] temporaryImageInMemory = readStream(inputStream);
-        // Decode into mat. Use any IMREAD_ option that describes your image appropriately
         return Imgcodecs.imdecode(new MatOfByte(temporaryImageInMemory), Imgcodecs.IMREAD_COLOR);
     }
 
     private static byte[] readStream(InputStream stream) throws IOException {
-        // Copy content of the image to byte-array
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
         byte[] data = new byte[16384];
 
-        while ((nRead = stream.read(data, 0, data.length)) != -1) {
+        while ((nRead = stream.read(data, 0, data.length)) != -1)
             buffer.write(data, 0, nRead);
-        }
 
         buffer.flush();
         byte[] temporaryImageInMemory = buffer.toByteArray();
