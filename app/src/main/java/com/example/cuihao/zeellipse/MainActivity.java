@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
                     MatOfPoint2f mop = new MatOfPoint2f();
                     mop.fromList(selectPoints);
                     RotatedRect box = Imgproc.fitEllipse(mop);
-                    Imgproc.ellipse(dis, box, new Scalar(255, 0, 0), 1);
+                    Imgproc.ellipse(dis, box, new Scalar(255, 0, 0), 2);
                     Imgproc.circle(dis, box.center, 2, new Scalar(255, 0, 0), -1);
                     String s = getResources().getString(R.string.textview_info_output,
                             box.center.x, box.center.y, box.size.width / 2, box.size.height / 2);
