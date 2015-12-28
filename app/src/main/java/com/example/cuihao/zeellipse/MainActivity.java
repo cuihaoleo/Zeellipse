@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                         dResults.add(d);
                 }
 
-                while (j<de2.length && de2[j]>=-derivative2Threshold) j++;
+                while (j<de2.length && !(de2[j]<-derivative2Threshold)) j++;
             }
 
             // OpenCV use BGR colorspace as default, convert to RGB

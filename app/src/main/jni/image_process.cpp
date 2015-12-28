@@ -346,7 +346,7 @@ void elliptical_integrate(const Mat &gray, RotatedRect &el, vector<double> &avg)
     avg.clear();
     avg.reserve(mk.size());
     for (auto a: mk)
-        avg.push_back((double)a[1]/a[0]);
+        avg.push_back(a[0]>0 ? (double)a[1]/a[0] : 0.0);
 }
 
 void preprocess(Mat &bgr, Mat &gray) {

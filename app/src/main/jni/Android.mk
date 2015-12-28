@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-OPENCV_LIB_TYPE:=STATIC
+#OPENCV_LIB_TYPE:=STATIC
 include $(LOCAL_PATH)/opencv-native/jni/OpenCV.mk
 LOCAL_MODULE    := jni_wrapper
 LOCAL_SRC_FILES := image_process.cpp jni_wrapper.cpp
