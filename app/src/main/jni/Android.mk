@@ -5,7 +5,6 @@ include $(CLEAR_VARS)
 include $(LOCAL_PATH)/opencv-native/jni/OpenCV.mk
 LOCAL_MODULE    := jni_wrapper
 LOCAL_SRC_FILES := image_process.cpp jni_wrapper.cpp
-LOCAL_LDLIBS +=  -llog -ldl
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)

@@ -1,8 +1,38 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+// NDK auto detect code, from http://stackoverflow.com/questions/28222158
+def getNdkDir() {
+    if (System.env.ANDROID_NDK_ROOT != null)
+        return System.env.ANDROID_NDK_ROOT
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def ndkdir = properties.getProperty('ndk.dir', null)
+    if (ndkdir == null)
+        throw new GradleException("NDK location not found. Define location with ndk.dir in the" /
+                      "local.properties file or with an ANDROID_NDK_ROOT environment variable.")
+
+    return ndkdir
+}
+
+def getNdkBuildCmd() {
+    def ndkbuild = getNdkDir() + "/ndk-build"
+    if (Os.isFamily(Os.FAMILY_WINDOWS))
+        ndkbuild += ".cmd"
+
+    return ndkbuild
+}
+
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
+    sourceSets.main.jni.srcDirs = []  //disable automatic ndk-build
+
+    ext {
+        targetABIList = ["x86", "armeabi", "armeabi-v7a"] as String[]
+    }
 
     defaultConfig {
         applicationId "com.example.cuihao.zeellipse"
@@ -17,16 +47,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main {
-            jni.srcDirs = [] //disable automatic ndk-build
-        }
-    }
     task ndkBuild(type: Exec) {
-        commandLine 'ndk-build', 'NDK_LIBS_OUT=jniLibs', '-C', file('src/main').absolutePath
+        def t = String.join(" ", targetABIList)
+        commandLine getNdkBuildCmd(), 'NDK_LIBS_OUT=jniLibs', 'APP_ABI=' + t, '-C', file('src/main').absolutePath
     }
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn ndkBuild
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include targetABIList
+            universalApk false
+        }
     }
 }
 
