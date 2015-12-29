@@ -95,7 +95,8 @@ void auto_crop(Mat *imgs[], double inner_crop=0.08) {
         for(size_t j= 0; j < contours[i].size(); j++)
             points.push_back(contours[i][j]);
 
-    RotatedRect rect = minAreaRect(points);
+    RotatedRect rect = points.size() ? minAreaRect(points) \
+                                     : RotatedRect(Point(0, 0), Size(1, 1), 0);
     if (rect.angle < -45.0) {
         Size t = Size(rect.size.height, rect.size.width);
         rect = RotatedRect(rect.center, t, rect.angle + 90.0);
@@ -103,13 +104,22 @@ void auto_crop(Mat *imgs[], double inner_crop=0.08) {
 
     Mat m = getRotationMatrix2D(rect.center, rect.angle, 1);
 
-    Size si = Size(rect.size.width * (1-inner_crop),
-                   rect.size.height * (1-inner_crop));
-    Point pa = Point(rect.center.x - si.width/2,
-                     rect.center.y - si.height/2);
-    Rect roi = Rect(pa, si);
-    Size ws = Size(rect.center.x + si.width/2 + 1,
-                   rect.center.y + si.height/2 + 1);
+    Size roi_size = Size(rect.size.width * (1-inner_crop),
+                         rect.size.height * (1-inner_crop));
+    if (roi_size.area() <= 0)
+        roi_size.width = roi_size.height = 1;
+
+    Point roi_center = Point(rect.center.x - roi_size.width/2,
+                             rect.center.y - roi_size.height/2);
+
+    if (rect.center.x - roi_size.width/2 < 0)
+        roi_size = Size(rect.center.x*2, roi_size.height);
+    if (rect.center.y - roi_size.height/2 < 0)
+        roi_size = Size(roi_size.width, rect.center.y*2);
+
+    Rect roi = Rect(roi_center, roi_size);
+    Size ws = Size(rect.center.x + roi_size.width/2 + 1,
+                   rect.center.y + roi_size.height/2 + 1);
     for (Mat **p = imgs; *p; p++) {
         warpAffine(**p, **p, m, ws);
         Mat cropped = cv::Mat(**p, roi);
@@ -143,9 +153,9 @@ void get_sobel(const Mat &gray, Mat &dst) {
 
 void detect_ellipses(const Mat &bin,
                      ellipse_list &ellipses,
-                     int min_pts = 500, int merge_overlap=8,
-                     double overlap_detect_dt=M_PI/100.0,
-                     double max_ecc=0.32) {
+                     int min_pts = 500, int merge_overlap = 8,
+                     double overlap_detect_dt = M_PI/100.0,
+                     double max_ecc = 0.32) {
     Mat labels, stats, centroids;
     int nLabels = connectedComponentsWithStats(bin, labels, stats, centroids);
     vector<Point> *all_points = new vector<Point>[nLabels];
