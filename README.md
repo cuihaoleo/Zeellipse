@@ -20,9 +20,7 @@
 
 ### 装入 OpenCV 库
 
-到 [OpenCV 网站](http://opencv.org/) 下载 OpenCV for Android。
-
-开发过程中适配的是 [3.0 版本](http://sourceforge.net/projects/opencvlibrary/files/opencv-android/3.0.0/OpenCV-3.0.0-android-sdk-1.zip/download)。后来发布了 3.1 版本，应该是兼容的。不要使用 2.X 版本，肯定不兼容。
+到 [OpenCV 网站](http://opencv.org/) 下载 OpenCV for Android。3.0 和 3.1 版本都可以用。
 
 将下载的 zip 文件解压，把以下文件放到本项目代码的指定目录：
 
@@ -31,14 +29,23 @@
 
 ### 使用 Android Studio 或 Gradle 编译
 
-本项目是从 Android Studio 1.5.1 创建的，可以直接导入。
+本项目是从 Android Studio 1.5.1 创建的，可以直接导入。如果没有 Android Studio，也可以用项目目录下的 Gradle 脚本来编译。
 
-如果没有 Android Studio，也可以用项目目录下的 Gradle 脚本来编译。比如要生成（未签名的）APK，执行（请自行替换 ``ANDROID_HOME`` 环境变量值为 ANDROID SDK 的安装目录）：
+如果 SDK、NDK 工具不在 ``$PATH`` 中，需要手动设置一下工具链的安装目录。方法是在项目目录下创建 ``local.properties``，内容形如：
+```
+ndk.dir=/path/to/android/ndk-bundle
+sdk.dir=/path/to/android/sdk
+```
+
+也可以通过指定 ``ANDROID_HOME`` 和 ``ANDROID_NDK_ROOT`` 环境变量来设置工具链安装目录。
+
+要生成（未签名的）APK，在项目目录执行：
 
 ```bash
-export ANDROID_HOME=/path/to/Android/SDK
 ./gradlew assembleRelease
 ```
+
+然后在 ``app/build/outputs/apk/`` 目录下就会生成适用于各种 ABI 的若干 APK 文件。
 
 ## 应用操作
 
@@ -54,10 +61,11 @@ export ANDROID_HOME=/path/to/Android/SDK
 
 ## 测试平台
 
-* Huawei U9508, Android 4.2.2
-* Genymotion's Google Nexus 4, Android 4.1.1 (with libhoudini)
+* Huawei U9508, Android 4.2.2 (armeabi, armeabi-v7a)
+* Genymotion's Google Nexus 4, Android 4.1.1 (x86, armeabi-v7a with libhoudini)
+* Genymotion's Google Nexus 7, Android 5.1.0 (x86)
 
-在以上平台，加载图片后的计算过程耗时不超过10s。
+在以上平台，除了 armeabi，加载图片后的计算过程一般耗时不超过10s。
 
 ## 已知问题
 
