@@ -9,4 +9,5 @@
     <string name="process_image_task__integrate">Integrating value&#8230;</string>
     <string name="process_image_task__done">Done!</string>
     <string name="process_image_task__failed">Failed!</string>
+    <string name="process_image_task__nothing_found">Nothing found!</string>
 </resources>

@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
 
             publishProgress(getResources().getString(R.string.process_image_task__preprocess));
             CppPreprocess(imColor.getNativeObjAddr(), (imGray = new Mat()).getNativeObjAddr());
+            // OpenCV use BGR colorspace as default, convert to RGB
+            Imgproc.cvtColor(imColor, imColor, Imgproc.COLOR_BGR2RGB);
             Imgproc.GaussianBlur(imGray, blur, new Size(7, 7), 3);
             Point pt = QuickFindCenter(blur);
 
@@ -155,6 +157,11 @@ public class MainActivity extends AppCompatActivity {
 
             publishProgress(getResources().getString(R.string.process_image_task__find_ellipse));
             avgEllipse = GetRBox(sobel);
+
+            if (avgEllipse.size.width + avgEllipse.size.height == 0) {
+                dResults.clear();
+                return true;
+            }
 
             publishProgress(getResources().getString(R.string.process_image_task__integrate));
             double[] seq = EllipticalIntegrate(blur, avgEllipse);
@@ -183,9 +190,6 @@ public class MainActivity extends AppCompatActivity {
                 while (j<de2.length && !(de2[j]<-derivative2Threshold)) j++;
             }
 
-            // OpenCV use BGR colorspace as default, convert to RGB
-            Imgproc.cvtColor(imColor, imColor, Imgproc.COLOR_BGR2RGB);
-
             return true;
         }
 
@@ -201,7 +205,12 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = Bitmap.createBitmap(imColor.cols(), imColor.rows(), Bitmap.Config.ARGB_8888);
                 Utils.matToBitmap(imColor, bitmap);
                 imageViewDisplay.setImageBitmap(bitmap);
-                textViewMessage.setText(R.string.process_image_task__done);
+
+                if (dResults.size() > 0)
+                    textViewMessage.setText(R.string.process_image_task__done);
+                else
+                    textViewMessage.setText(R.string.process_image_task__nothing_found);
+
                 resetImage();
             } else
                 textViewMessage.setText(R.string.process_image_task__failed);

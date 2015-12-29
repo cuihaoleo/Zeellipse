@@ -96,6 +96,11 @@ void auto_crop(Mat *imgs[], double inner_crop=0.08) {
             points.push_back(contours[i][j]);
 
     RotatedRect rect = minAreaRect(points);
+    if (rect.angle < -45.0) {
+        Size t = Size(rect.size.height, rect.size.width);
+        rect = RotatedRect(rect.center, t, rect.angle + 90.0);
+    }
+
     Mat m = getRotationMatrix2D(rect.center, rect.angle, 1);
 
     Size si = Size(rect.size.width * (1-inner_crop),
@@ -112,12 +117,13 @@ void auto_crop(Mat *imgs[], double inner_crop=0.08) {
     }
 }
 
-void auto_resize(Mat *imgs[], int width = 1000) {
+void auto_resize(Mat *imgs[], int max_dim_size = 1200) {
     Size si = (*imgs[0]).size();
     if (si.width > si.height)
-        si = Size(si.width*(1.0*width/si.height), 1000);
+        si = Size(max_dim_size, si.height*(1.0*max_dim_size/si.width));
     else
-        si = Size(1000, si.height*(1.0*width/si.width));
+        si = Size(si.width*(1.0*max_dim_size/si.height), max_dim_size);
+
     for (Mat **p = imgs; *p; p++)
         resize(**p, **p, si);
 }
@@ -257,6 +263,9 @@ RotatedRect average_allipse(const ellipse_list ellipses, double center_within_ra
         accu += count;
     }
 
+    if (accu == 0.0)
+        return RotatedRect(Point(0, 0), Size(0, 0), 0);
+
     vector<Point> new_el;
     for (double t=-M_PI*2; t<M_PI*2; t+=dt) {
         double x_accu, y_accu;
@@ -330,6 +339,8 @@ void elliptical_integrate(const Mat &gray, RotatedRect &el, vector<double> &avg)
     double cos_ = cos(theta), sin_ = sin(theta);
     double cx = el.center.x, cy = el.center.y;
     vector< array<uint32_t, 2> > mk;
+
+    if (std::isnan(ratio)) ratio = 1.0;
 
     for (int x=0; x<gray.cols; x++)
         for (int y=0; y<gray.rows; y++) {
