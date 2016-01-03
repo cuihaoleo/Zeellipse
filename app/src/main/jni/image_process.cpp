@@ -60,7 +60,7 @@ Point quick_find_center(const Mat &gray) {
     return Point(ans);
 }
 
-void filter_hue_val(const Mat &hsv, Mat &dst, int min_val=20) {
+void filter_hue_val(const Mat &hsv, Mat &dst) {
     vector<Mat> hsvChannels(3);
     split(hsv, hsvChannels);
 
@@ -82,7 +82,6 @@ void filter_hue_val(const Mat &hsv, Mat &dst, int min_val=20) {
 
     mask1 &= mask2;
     bitwise_and(hsvChannels[2], mask1, dst);
-    dst -= min_val;
 }
 
 void auto_crop(Mat *imgs[], double inner_crop=0.08) {
