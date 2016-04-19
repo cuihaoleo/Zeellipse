@@ -27,7 +27,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
     sourceSets.main.jni.srcDirs = []  //disable automatic ndk-build
 
     ext {
@@ -67,7 +67,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
     compile project(':libs:opencv')
     compile 'com.commit451:PhotoView:1.2.4'
 }
